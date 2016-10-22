@@ -21,11 +21,13 @@ module.exports = function initHMR( server, WebpackConfig ) {
     register: HapiWebpackHotMiddleware
   }
 
+  const middlewares = [ devMiddleware, hotMiddleware ]
+
   const onError = function (err) {
     if (err) {
       throw err
     }
   }
 
-  return server.register([ devMiddleware, hotMiddleware ], onError)
+  return server.register(middlewares, onError)
 }

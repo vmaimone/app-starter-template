@@ -6,9 +6,9 @@ const Inert = require('inert');
 const server = new Hapi.Server();
 
 server.connection({
-  port: process.env.NODE_ENV !== 'production'
-    ? 3000
-    : 7212
+  port: process.env.NODE_ENV !== 'production' ? 3000 : 7212,
+  router: { stripTrailingSlash: true },
+  routes: { cors: { credentials: true } }
 });
 
 // Register webpack HMR, only for non-production environments
@@ -42,17 +42,6 @@ server.register([Inert], function (err) {
     }
   });
 
-  // Example api call
-  server.route({
-    method: 'GET',
-    path: '/api/call',
-    handler: function (request, reply) {
-      reply({
-        message: 'Hello!'
-      })
-    }
-  });
-
   server.route({
     method: 'GET',
     path: '/',
@@ -61,6 +50,17 @@ server.register([Inert], function (err) {
     }
   });
 });
+
+server.route( require('./server/routes') )
+
+server.state('session', {
+    // domain: ''
+    ttl: null, // 24 * 60 * 60 * 1000,  /* One day */
+    path: '/',
+    isHttpOnly: true,
+    isSecure: false,
+    encoding: 'base64json'
+})
 
 server.start((err) => {
 

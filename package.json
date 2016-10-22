@@ -12,7 +12,9 @@
     "hapi": "^15.1.1",
     "inert": "^4.0.0",
     "vue": "^2.0.0",
-    "vue-resource": "^1.0.3"
+    "vue-resource": "^1.0.3",
+    "@kleinsteel/auth": "^0.0.4",
+    "@kleinsteel/reverse-dns": "^0.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.9.1",
