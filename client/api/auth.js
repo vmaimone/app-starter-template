@@ -2,7 +2,7 @@ import $http from './$http'
 
 const CurrentUser = {
   username: '',
-  lastPing: 0
+  lastPing: null
 }
 
 export default ({
@@ -31,9 +31,12 @@ export default ({
             console.info(`[LOGIN] username '${authUser.username}' has been authenticated`)
             return response.data
           } else {
-            throw new Error('auth failed')
+            console.error(`[LOGIN] login attempt failed for user '${username}'`)
+            if(CurrentUser.username) return this.logout()
+            else throw new Error('auth failed')
           }
         } else {
+          console.error(`[LOGIN] unable to authenticate`)
           throw new Error('request failed')
         }
 
