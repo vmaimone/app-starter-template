@@ -1,12 +1,9 @@
 <template>
   <div>
     <h1>{{ title }}</h1>
-    <button class="button" @click="helloCall()">Call API</button>
-    <p style="text-large">API says: {{ api }}</p>
-    <hr>
     <div>
-      <div style="margin: 1rem; color: #bbbbbb;">
-        <button class="button-sm" @click.prevent="checkAuth" type="button">
+      <div id="login-status">
+        <button type="button" class="button-sm" @click.prevent="checkAuth">
           <span v-if="showSuccessIndicator">Authenticated!</span>
           <span v-else>Check Login Status</span>
         </button>
@@ -18,11 +15,16 @@
           you are not loggin in
         </small>
       </div>
-      <div style="padding:.5rem 1rem; border: 1px solid gray; display:inline-block">
-        <div style="margin-bottom:1rem;color:dimgray">Login Component</div>
+      <div class="login-component">
+        <p>Login Component</p>
         <login-form @login-success="setAppuser"></login-form>
       </div>
     </div>
+
+    <hr style="margin:1em auto;">
+
+    <button type="button" class="button" @click="helloCall()">Call API</button>
+    <p>API says: {{ api }}</p>
   </div>
 </template>
 
@@ -62,7 +64,10 @@ export default {
         .then(this.setAppuser)
     },
     logout() {
-      return api.auth.logout().then(this.setAppuser)
+      return api
+        .auth
+        .logout()
+        .then(this.setAppuser)
     },
     checkAuth() {
       return this
@@ -97,6 +102,22 @@ body {
   .button-sm {
     padding:.25rem;
     font-size:.9rem;
+  }
+
+  .login-component {
+    padding:.5rem 1rem;
+    border: 1px solid gray;
+    display:inline-block;
+    &>p {
+      margin-bottom:1rem;
+      margin-top: 0;
+      color: dimgray;
+    }
+  }
+
+  #login-status {
+    margin: 1rem;
+    color: #bbbbbb;
   }
 
 }
