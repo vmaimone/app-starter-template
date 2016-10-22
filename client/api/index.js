@@ -1,2 +1,3 @@
 import example from './example.js'
-export default ({ example })
+import auth from './auth.js'
+export default (window.API = ({ example, auth }))

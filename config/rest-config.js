@@ -3,7 +3,7 @@ export default function createRestConfig(environment) {
 
   let env = environment.NODE_ENV || 'development'
   let port = environment.PORT || window.location.port || 80
-  let prefix = environment.PREFIX || 'api'
+  let prefix = environment.PREFIX || ''
   let hostname = environment.HOSTNAME || window.location.hostname || 'localhost'
   return {
     port: port,
@@ -16,7 +16,7 @@ export default function createRestConfig(environment) {
     },
 
     toString: function() {
-      return `//${this.hostname}:${this.port}/${this.prefix}`
+      return `//${this.hostname}:${this.port}${this.prefix ? '/'+this.prefix : ''}`
     }
   }
 
