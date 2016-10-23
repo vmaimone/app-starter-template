@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon app.js",
     "start": "cross-env NODE_ENV=production node app.js",
-    "build": "webpack --progress --hide-modules --config config/production.webpack.config.js"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules --config config/production.webpack.config.js",
+    "analysis": "cross-env NODE_ENV=production webpack --profile --json --config config/production.webpack.config.js > stats.json"
   },
   "dependencies": {
     "@kleinsteel/auth": "^0.0.4",
