@@ -9,9 +9,6 @@
     </label>
     &nbsp;
     <button type="submit">Ok</button>
-
-
-
   </form>
 </template>
 <script>
