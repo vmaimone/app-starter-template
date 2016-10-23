@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{ title }}</h1>
+    <h1>\{{ title }}</h1>
     <div>
       <div id="login-status">
         <button type="button" class="button-sm" @click.prevent="checkAuth">
@@ -9,7 +9,7 @@
         </button>
         &nbsp;
         <small v-if="appuser.isLoggedIn === true">
-          currently logged in as <strong>{{appuser.username}}</strong>
+          currently logged in as <strong>\{{appuser.username}}</strong>
         </small>
         <small v-else>
           you are not loggin in
@@ -24,7 +24,7 @@
     <hr style="margin:1em auto;">
 
     <button type="button" class="button" @click="helloCall()">Call API</button>
-    <p>API says: {{ api }}</p>
+    <p>API says: \{{ api }}</p>
   </div>
 </template>
 
