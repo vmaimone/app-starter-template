@@ -1,39 +1,56 @@
-import Vue from 'vue'
-import VueResource from 'vue-resource'
 import createRestConfig from '../../config/rest-config.js'
-
-// setup vue plugin for web requests and export custom object with fixed settings
-Vue.use(VueResource)
-Vue.http.options.xhr = { withCredentials: true }
-
-const $http = {}
 const REST_CONFIG = createRestConfig(process.env)
 
-for (let key in Vue.http) {
-  if (typeof Vue.http[key] === 'function') {
-    $http[key] = (path = '/' , data = {} , options = {}) => _http(key, REST_CONFIG.URL + path, data, options)
-  } else {
-    $http[key] = Vue.http[key]
-  }
+// setup vue plugin for web requests and export custom object with fixed settings
+const DEFAULT_OPTIONS = {
+  method: 'get',
+  credentials: 'include'
+}
+
+const $http = {
+  get: (path = '/' , data = {} , options = {}) => _http('get', REST_CONFIG.URL + path, data, options),
+  put: (path = '/' , data = {} , options = {}) => _http('put', REST_CONFIG.URL + path, data, options),
+  post: (path = '/' , data = {} , options = {}) => _http('post', REST_CONFIG.URL + path, data, options),
+  delete: (path = '/' , data = {} , options = {}) => _http('delete', REST_CONFIG.URL + path, data, options)
 }
 
 export default $http
 
+
+/* == private methods ============================================================================================= */
 function _http (method, url, data, options) {
   data = data || {}
-  options = options || {}
+  options = Object.assign({}, DEFAULT_OPTIONS, options || {})
+  options.method = method || options.method
 
-  if (!method) return Promise.reject('invalid http method')
-  else method = method.toLowerCase()
-
-  let promise
-  if (method == 'post' || method == 'put') {
-    promise = Vue.http[method](url, data, options)
+  if (options.method == 'post' || options.method === 'put') {
+    options.body = JSON.stringify(data || {})
   } else {
-    options = Object.assign({}, data, options)
-    promise = Vue.http[method](url, options)
+    if (data) {
+      let qparams = typeof data.params === 'object' ? data.params : data
+      let qs = []
+      for (let param in qparams) {
+        let value = qparams[param]
+        if ((value !== null) && (value !== void 0)) {
+          qs.push(param+'='+(value instanceof Date ? value.toJSON() : value))
+        }
+      }
+      if(qs.length) url += ('?' + qs.join('&'))
+    }
   }
 
-  return promise
+  return fetch(url, options)
+    .then(status)
+    .catch(function(error) {
+      console.log('Request failed', error);
+      return Promise.reject(error)
+    })
 }
 
+function status(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response.json().then( data => ({ ok: true, data: data }))
+  } else {
+    return Promise.reject({ ok: false, data: response.statusText })
+  }
+}
