@@ -1,13 +1,8 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import router from './router'
 import App from './App.vue'
 
-Vue.use(VueRouter)
+const el = '#app'
+const application = Object.assign(App, { el, router })
 
-window.App = new Vue({
-  el: '#app',
-  components: {
-    App,
-    router: new VueRouter(router)
-  }
-})
+window.App = new Vue(application)
