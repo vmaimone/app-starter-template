@@ -25,6 +25,8 @@
 
     <button type="button" class="button" @click="helloCall()">Call API</button>
     <p>API says: \{{ api }}</p>
+    <router-view></router-view>
+
   </div>
 </template>
 
