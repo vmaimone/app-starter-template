@@ -3,9 +3,10 @@
 const Hapi = require('hapi')
 const server = new Hapi.Server()
 const PORT = process.env.NODE_ENV !== 'production'
-  ? 3000 // production port number
-  : 7212 // development port number
+  ? 3000 // dev port number
+  : 7212 // production port number (change me)
 
+// webserver settings
 server.connection({
   port: PORT,
   router: {
@@ -42,8 +43,8 @@ server.state('session', {
 })
 
 // decorate reply interface with reply.vue
-const ReplyVue = require('./server/plugins/reply-vue')
-server.register(ReplyVue, err => err ? console.error(err) : null)
+// const ReplyVue = require('./server/plugins/reply-vue')
+// server.register(ReplyVue, err => err ? console.error(err) : null)
 
 // boot the server and log the routes table to the console
 const createRoutesTable = require('./server/plugins/routes-table')
