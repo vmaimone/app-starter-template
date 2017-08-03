@@ -1,80 +1,45 @@
+require('./env')
 const path = require('path')
 const webpack = require('webpack')
+const BabiliPlugin = require('babili-webpack-plugin')
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+Object.assign(exports, require('./webpack.config'))
 
-module.exports = {
-  entry: ['./client/main.js'],
-  output: {
-    path: path.resolve(__dirname, '../public/'),
-    publicPath: '/',
-    filename: 'build.js'
-  },
-  resolve: {
-    extensions: ['', '.js', '.vue'],
-    alias: {
-      'vue': 'vue/dist/vue'
-    }
-  },
-  resolveLoader: {
-    root: path.join(__dirname, 'node_modules'),
-  },
-  module: {
-    loaders: [{
-      test: /\.vue$/,
-      loader: 'vue'
-    }, {
-      test: /\.js$/,
-      loader: 'babel',
-      exclude: /node_modules/
-    }, {
-      test: /\.json$/,
-      loader: 'json'
-    }, {
-      test: /\.html$/,
-      loader: 'vue-html'
-    }, {
-      test: /\.(png|jpg|gif|svg)$/,
-      loader: 'url',
-      query: {
-        limit: 10000,
-        name: '[name].[ext]?[hash]'
-      }
-    }]
-  },
-  vue: {
-    loaders: {
-      css: ExtractTextPlugin.extract(['css']),
-      sass: ExtractTextPlugin.extract(['css', 'sass'])
-    }
-  },
-  plugins: [
-    // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.NoErrorsPlugin(),
-    // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: path.resolve(__dirname, '../public/index.html'),
-      template: path.resolve(__dirname, '../build/index_dev.html'),
-      inject: true
-    }),
-    new ExtractTextPlugin('style.css')
-  ],
-  devtool: '#source-map'
+exports.output.publicPath = '.'
+exports.devtool = '#source-map'
+exports.output.sourceMapFilename = '[name].[hash:7].js.map'
+exports.resolve = {
+  alias: {
+    'client': path.resolve(__dirname, '../client'),
+    'config': path.resolve(__dirname, '../config'),
+    'components': path.resolve(__dirname, '../client/components'),
+    'vue$': 'vue/dist/vue.esm.js',
+    'vue-router$': 'vue-router/dist/vue-router.esm.js'
+  }
 }
-
 // http://vuejs.github.io/vue-loader/workflow/production.html
-module.exports.plugins = (module.exports.plugins || []).concat([
+exports.plugins = (exports.plugins || []).concat([
+
   new webpack.DefinePlugin({
     'process.env': {
-      NODE_ENV: '"production"'
+      NODE_ENV: '"production"',
+      PORT: process.env.PORT
     }
+  }),
+  // new webpack.LoaderOptionsPlugin({
+  //   minimize: true,
+  //   debug: false
+  // }),
+  new BabiliPlugin({}, {
+    comments: false
   }),
   new webpack.optimize.UglifyJsPlugin({
     compress: {
-      warnings: false
+      warnings: true
+    },
+    output: {
+      comments: false
     }
-  }),
-  new webpack.optimize.OccurenceOrderPlugin()
+  })
 ])
+

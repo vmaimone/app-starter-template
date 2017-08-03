@@ -56,7 +56,7 @@ export default {
   methods: {
     helloCall() {
       return api.example.apiCall().then((data) => {
-        return this.api = data.message
+        return this.api = data
       })
     },
     ping() {
@@ -89,7 +89,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="scss">
 html {
   font-size: 16px;
 }

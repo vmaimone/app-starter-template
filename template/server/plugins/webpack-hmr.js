@@ -1,33 +1,25 @@
 const HapiWebpackDevMiddleware = require('hapi-webpack-dev-middleware')
 const HapiWebpackHotMiddleware = require('hapi-webpack-hot-middleware')
 
-module.exports = function initHMR( server, WebpackConfig ) {
+module.exports = function initHMR(server, WebpackConfig) {
 
-  const devMiddleware = {
+  server.register({
     register: HapiWebpackDevMiddleware,
     options: {
       config: WebpackConfig,
       options: {
-        noInfo: true,
-        publicPath: WebpackConfig.output.publicPath,
+        publicPath: WebpackConfig.output.publicPath || '/public',
         stats: {
-          colors: true
+          colors: true,
+          chunks: false
         }
       }
     }
-  }
+  })
 
-  const hotMiddleware = {
+  server.register({
     register: HapiWebpackHotMiddleware
-  }
+  })
 
-  const middlewares = [ devMiddleware, hotMiddleware ]
-
-  const onError = function (err) {
-    if (err) {
-      throw err
-    }
-  }
-
-  return server.register(middlewares, onError)
+  return server
 }

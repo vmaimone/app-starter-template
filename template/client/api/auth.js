@@ -10,9 +10,7 @@ export default ({
     CurrentUser.lastPing = new Date()
     return $http
       .get('/auth/login')
-      .then(response => {
-        return response.data
-      })
+      .then(response => response.data)
   },
 
   authenticate({ username, password }) {
@@ -24,7 +22,7 @@ export default ({
       .post('/auth/login', payload)
       .then(response => {
         if (response.ok) {
-          let authUser = response.data
+          const authUser = response.data
           if (authUser.isLoggedIn && authUser.username) {
             CurrentUser.username = authUser.username
             CurrentUser.lastPing = new Date()
@@ -32,14 +30,13 @@ export default ({
             return response.data
           } else {
             console.error(`[LOGIN] login attempt failed for user '${username}'`)
-            if(CurrentUser.username) return this.logout()
+            if (CurrentUser.username) return this.logout()
             else throw new Error('auth failed')
           }
         } else {
           console.error(`[LOGIN] unable to authenticate`)
           throw new Error('request failed')
         }
-
       })
   },
 

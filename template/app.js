@@ -1,16 +1,16 @@
-'use strict';
-
+'use strict'
+require('./config/env')
 const Hapi = require('hapi')
 const server = new Hapi.Server()
 const PORT = process.env.NODE_ENV !== 'production'
   ? 3000 // dev port number
-  : 7212 // production port number (change me)
+  : process.env.PORT // production port number (change me)
 
 // webserver settings
 server.connection({
   port: PORT,
   router: {
-    stripTrailingSlash: true
+    stripTrailingSlash: false
   },
   routes: {
     cors: { credentials: true }
@@ -30,7 +30,10 @@ initPublicDirectory(server, __dirname)
 
 // api routes for the server side portion
 const routes = require('./server/routes')
-server.route(routes)
+for (let index = 0; index < routes.length; index++) {
+  const register = routes[index]
+  server.register(register)
+}
 
 // user session state (cookie)
 server.state('session', {

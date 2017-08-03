@@ -1,66 +1,102 @@
 const path = require('path')
 const webpack = require('webpack')
 const projectRoot = path.resolve(__dirname, '../')
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-  entry: ['webpack-hot-middleware/client', './client/main.js'],
+  context: projectRoot,
+  entry: {
+    app: './client/main.js'
+  },
   output: {
+    filename: '[name].[hash:7].js',
     path: path.resolve(__dirname, '../public/'),
     publicPath: '/',
-    filename: 'build.js'
+    chunkFilename: '[name]-[chunkhash].js'
   },
   resolve: {
-    extensions: ['', '.js', '.vue'],
     alias: {
       'client': path.resolve(__dirname, '../client'),
-      'components': path.resolve(__dirname, '../clients/components'),
-      'vue': 'vue/dist/vue'
+      'config': path.resolve(__dirname, '../config'),
+      'components': path.resolve(__dirname, '../client/components'),
+      'ag-grid/main$': 'ag-grid/dist/ag-grid.min.js',
+      'vue$': 'vue/dist/vue.js',
+      'vue-router$': 'vue-router/dist/vue-router.min.js'
     }
-  },
-  resolveLoader: {
-    root: path.join(__dirname, 'node_modules'),
   },
   module: {
-    loaders: [{
-      test: /\.vue$/,
-      loader: 'vue'
-    }, {
-      test: /\.js$/,
-      loader: 'babel',
-      exclude: /node_modules/
-    }, {
-      test: /\.json$/,
-      loader: 'json'
-    }, {
-      test: /\.html$/,
-      loader: 'vue-html'
-    }, {
-      test: /\.(png|jpg|gif|svg)$/,
-      loader: 'url',
-      query: {
-        limit: 10000,
-        name: '[name].[ext]?[hash]'
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          esModule: false // control how `import` resolves `.default`
+          // loaders: cssLoaders()
+        }
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: [ path.join(projectRoot, 'client') ]
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'vue-style-loader',
+          use: [ 'css-loader' ]
+        })
+      },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'vue-style-loader',
+          use: [ 'css-loader', 'sass-loader' ]
+        })
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        loader: 'url-loader',
+        query: {
+          limit: 10000,
+          name: '[name].[ext]?[hash]'
+        }
       }
-    }]
-  },
-  vue: {
-    loaders: {
-      'sass': 'vue-style!css!sass'
-    }
+    ]
   },
   plugins: [
-    // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new ExtractTextPlugin({
+      filename: '[name].[hash:7].css'
+    }),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, '../public/index.html'),
-      template: path.resolve(__dirname, '../build/index_dev.html'),
+      template: path.resolve(__dirname, './index_dev.html'),
       inject: true
+    }),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendors',
+      minChunks(module) {
+        return isExternal(module)
+      }
     })
   ],
-  devtool: '#eval'
+  devtool: '#cheap-module-eval-source-map'
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  module.exports.plugins.push(new webpack.HotModuleReplacementPlugin())
+}
+
+function isExternal({ userRequest }) {
+  const isString = typeof userRequest === 'string'
+  const isNodeModule = userRequest.indexOf('node_modules') > -1
+  const isBowerComponent = userRequest.indexOf('bower_components') > -1
+
+  return isString && (isNodeModule || isBowerComponent)
 }

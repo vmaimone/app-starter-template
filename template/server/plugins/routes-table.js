@@ -10,7 +10,7 @@ module.exports = function printRoutesTable(server) {
     path: '/meta/routes',
     handler(request, reply) {
       return reply(extractRoutes(table).reduce((dict, current) => {
-        let ns = current.ns || '/'
+        const ns = current.ns || '/'
         delete current.ns
         if (!dict[ns]) dict[ns] = []
         dict[ns].push(current)
@@ -29,22 +29,22 @@ module.exports = function printRoutesTable(server) {
 }
 
 function stringifyRoute({ method, path }) {
-  let pad = ' '.repeat('method'.length - method.length)
+  const pad = ' '.repeat('method'.length - method.length)
   if (path === '/') path = '/index.html'
   return `${method}  ${pad}${path}`
 }
 
 function extractRoutes(table, fn) {
-  let entries = table.map(entry => {
-    let ns = entry.path.slice(1).split('/')[0].trim().toLowerCase()
-    let path = entry.path
-    let method = entry.method.toUpperCase()
+  const entries = table.map(entry => {
+    const ns = entry.path.slice(1).split('/')[0].trim().toLowerCase()
+    const path = entry.path
+    const method = entry.method.toUpperCase()
     return { ns, path, method }
   })
 
   entries.sort((a, b) => {
-    let aa = (a.ns + a.path.replace(a.ns, '') + a.method).toLowerCase()
-    let bb = (b.ns + b.path.replace(b.ns, '') + b.method).toLowerCase()
+    const aa = (a.ns + a.path.replace(a.ns, '') + a.method).toLowerCase()
+    const bb = (b.ns + b.path.replace(b.ns, '') + b.method).toLowerCase()
     return aa === bb
       ? 0
       : (aa > bb ? 1 : -1)
