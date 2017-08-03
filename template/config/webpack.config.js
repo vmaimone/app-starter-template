@@ -19,7 +19,9 @@ module.exports = {
     alias: {
       'client': path.resolve(__dirname, '../client'),
       'config': path.resolve(__dirname, '../config'),
-      'components': path.resolve(__dirname, '../client/components'),
+      '~api': path.resolve(__dirname, '../client/api'),
+      '~pages': path.resolve(__dirname, '../client/pages'),
+      '~components': path.resolve(__dirname, '../client/components'),
       'ag-grid/main$': 'ag-grid/dist/ag-grid.min.js',
       'vue$': 'vue/dist/vue.js',
       'vue-router$': 'vue-router/dist/vue-router.min.js'

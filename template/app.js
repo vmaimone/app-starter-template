@@ -2,13 +2,10 @@
 require('./config/env')
 const Hapi = require('hapi')
 const server = new Hapi.Server()
-const PORT = process.env.NODE_ENV !== 'production'
-  ? 3000 // dev port number
-  : process.env.PORT // production port number (change me)
 
 // webserver settings
 server.connection({
-  port: PORT,
+  port: process.env.PORT,
   router: {
     stripTrailingSlash: false
   },

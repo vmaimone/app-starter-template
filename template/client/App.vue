@@ -1,126 +1,34 @@
 <template>
-  <div>
-    <h1>\{{ title }}</h1>
-    <div>
-      <div id="login-status">
-        <button type="button" class="button-sm" @click.prevent="checkAuth">
-          <span v-if="showSuccessIndicator">Authenticated!</span>
-          <span v-else>Check Login Status</span>
-        </button>
-        &nbsp;
-        <small v-if="appuser.isLoggedIn === true">
-          currently logged in as <strong>\{{appuser.username}}</strong>
-        </small>
-        <small v-else>
-          you are not loggin in
-        </small>
+  <div id="app">
+    <div class="level">
+      <div class="level-left">
+        <div class="title is-3">
+          {{$route.meta.title}}
+        </div>
       </div>
-      <div class="login-component">
-        <p>Login Component</p>
-        <login-form @login-success="setAppuser"></login-form>
-      </div>
+      <div class="level-right"></div>
     </div>
-
-    <hr style="margin:1em auto;">
-
-    <button type="button" class="button" @click="helloCall()">Call API</button>
-    <p>API says: \{{ api }}</p>
     <router-view></router-view>
-
   </div>
 </template>
 
 <script>
-import api from './api'
-import loginForm from './components/login-form.vue'
 export default {
   name: 'application',
-  components: { loginForm },
-  data: function() {
+  data() {
     return {
-      // note: changing this line won't causes changes
-      // with hot-reload because the reloaded component
-      // preserves its current state and we are modifying
-      // its initial state.
-      title: 'Welcome!',
-      api: '',
-      form: { username: '', password: '' },
-      appuser: {},
-      error: {},
-      showSuccessIndicator: false
-    }
-  },
-  created() {
-    this.ping()
-  },
-  methods: {
-    helloCall() {
-      return api.example.apiCall().then((data) => {
-        return this.api = data
-      })
-    },
-    ping() {
-      return api
-        .auth
-        .ping()
-        .then(this.setAppuser)
-    },
-    logout() {
-      return api
-        .auth
-        .logout()
-        .then(this.setAppuser)
-    },
-    checkAuth() {
-      return this
-        .ping()
-        .then(() => {
-          if(this.appuser.isLoggedIn) this.showSuccessAnimation()
-        })
-    },
-    setAppuser(user) {
-      return this.appuser = user||{}
-    },
-    showSuccessAnimation() {
-      this.showSuccessIndicator = true
-      window.setTimeout(() => this.showSuccessIndicator = false, 1e3)
+      appuser: {}
     }
   }
 }
 </script>
 
 <style lang="scss">
+@import '~bulma';
 html {
-  font-size: 16px;
-}
-body {
-  font-family: Open Sans, sans-serif;
-
-  .button {
-    padding:.5rem;
-    font-size:1rem;
-  }
-
-  .button-sm {
-    padding:.25rem;
-    font-size:.9rem;
-  }
-
-  .login-component {
-    padding:.5rem 1rem;
-    border: 1px solid gray;
-    display:inline-block;
-    &>p {
-      margin-bottom:1rem;
-      margin-top: 0;
-      color: dimgray;
-    }
-  }
-
-  #login-status {
-    margin: 1rem;
-    color: #bbbbbb;
-  }
-
+  font-size: 14px;
+  padding: 0.25rem;
+  height: 100%;
+  background-color: whitesmoke;
 }
 </style>

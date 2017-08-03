@@ -12,7 +12,9 @@ exports.resolve = {
   alias: {
     'client': path.resolve(__dirname, '../client'),
     'config': path.resolve(__dirname, '../config'),
-    'components': path.resolve(__dirname, '../client/components'),
+    '~api': path.resolve(__dirname, '../client/api'),
+    '~pages': path.resolve(__dirname, '../client/pages'),
+    '~components': path.resolve(__dirname, '../client/components'),
     'vue$': 'vue/dist/vue.esm.js',
     'vue-router$': 'vue-router/dist/vue-router.esm.js'
   }
