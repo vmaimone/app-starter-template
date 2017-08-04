@@ -1,7 +1,8 @@
 {
-  "name": "my-project",
-  "description": "a hapi / vue project",
-  "author": "vin maimone",
+  "name": "{{ name }}",
+  "version": "0.0.0",
+  "description": "{{ description }}",
+  "author": "{{ author }}",
   "private": true,
   "scripts": {
     "dev": "nodemon app.js",
