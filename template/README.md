@@ -51,3 +51,4 @@ Credits:
 [Vue 2](https://vuejs.org/)
 [Hapi](http://hapijs.com/)
 [Webpack](https://webpack.github.io/)
+[Bulma](http://bulma.io/)
