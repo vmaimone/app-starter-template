@@ -7,6 +7,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
   context: projectRoot,
   entry: {
+    hmr: 'webpack-hot-middleware/client',
     app: './client/main.js'
   },
   output: {
