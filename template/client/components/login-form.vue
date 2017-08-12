@@ -1,5 +1,6 @@
 <template>
-  <form v-if="!$root.appuser.isLoggedIn" @submit.prevent="login(form)">
+  <div class="box">
+    <form @submit.prevent="login(form)">
       <div class="field" >
         <div class="control-label">
           <label class="label">Username</label>
@@ -20,6 +21,7 @@
         <button class="button border-primary" type="submit">Log in</button>
       </div>
     </form>
+  </div>
 </template>
 
 <script>
