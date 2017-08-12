@@ -1,5 +1,5 @@
 <template>
-  <section class="column is-one-quarter is-offset-one-quarter box" style="margin:10vh auto;">
+  <section class="column is-one-quarter is-offset-one-quarter" style="margin:10vh auto;">
     <login-form @login-success="loginSuccess"></login-form>
   </section>
 </template>
@@ -14,7 +14,8 @@
       }
     },
     methods: {
-      loginSuccess() {
+      loginSuccess(appuser) {
+        this.$root.appuser = appuser
         return this.$router.push({ name: 'home' })
       },
     }
