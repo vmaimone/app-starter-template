@@ -17,7 +17,10 @@ export default {
   name: 'application',
   data() {
     return {
-      appuser: {}
+      appuser: {
+        username: 'guest',
+        isLoggedIn: false
+      }
     }
   }
 }
