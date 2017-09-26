@@ -5,9 +5,12 @@ const BabiliPlugin = require('babili-webpack-plugin')
 
 Object.assign(exports, require('./webpack.config'))
 
+delete exports.entry.hmr
+
 exports.output.publicPath = '.'
 exports.devtool = '#source-map'
 exports.output.sourceMapFilename = '[name].[hash:7].js.map'
+
 exports.resolve = {
   alias: {
     'client': path.resolve(__dirname, '../client'),
@@ -15,8 +18,8 @@ exports.resolve = {
     '~api': path.resolve(__dirname, '../client/api'),
     '~pages': path.resolve(__dirname, '../client/pages'),
     '~components': path.resolve(__dirname, '../client/components'),
-    'vue$': 'vue/dist/vue.esm.js',
-    'vue-router$': 'vue-router/dist/vue-router.esm.js'
+    'vue$': 'vue/dist/vue.runtime.min.js',
+    'vue-router$': 'vue-router/dist/vue-router.min.js'
   }
 }
 // http://vuejs.github.io/vue-loader/workflow/production.html
