@@ -7,7 +7,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
   context: projectRoot,
   entry: {
-    hmr: 'webpack-hot-middleware/client',
     app: './client/main.js'
   },
   output: {
@@ -23,8 +22,7 @@ module.exports = {
       '~api': path.resolve(__dirname, '../client/api'),
       '~pages': path.resolve(__dirname, '../client/pages'),
       '~components': path.resolve(__dirname, '../client/components'),
-      'ag-grid/main$': 'ag-grid/dist/ag-grid.min.js',
-      'vue$': 'vue/dist/vue.js',
+      'vue$': 'vue/dist/vue.runtime.js',
       'vue-router$': 'vue-router/dist/vue-router.min.js'
     }
   },
@@ -93,6 +91,7 @@ module.exports = {
 }
 
 if (process.env.NODE_ENV !== 'production') {
+  module.exports.entry.hmr = 'webpack-hot-middleware/client'
   module.exports.plugins.push(new webpack.HotModuleReplacementPlugin())
 }
 
